@@ -158,6 +158,12 @@ img,svg,video{max-width:100%}
 .dth{display:grid;grid-template-columns:repeat(auto-fill,minmax(3.4rem,1fr));gap:6px;overflow:visible}
 .dth button{width:100%;height:auto;aspect-ratio:1/1.15;flex:none}
 @media (max-width:900px){.x{right:auto;left:20px}}
+
+.artb{position:absolute;left:10px;bottom:10px;z-index:2;background:#0B0B0C;color:#fff;font:700 .85rem "Barlow Condensed",Arial,sans-serif;letter-spacing:.12em;padding:.35rem .75rem;border-radius:999px}
+.artl{margin:10px 0 0;color:var(--gold2);font-weight:600}.artl b{letter-spacing:.08em;color:var(--ink)}
+.dth button{display:flex;flex-direction:column;align-items:center;gap:2px;aspect-ratio:auto;height:auto}
+.dth button img{width:100%;height:auto;aspect-ratio:1/1.1;object-fit:contain}
+.dth button span{font:700 .56rem/1.2 Barlow,Arial,sans-serif;color:#111;letter-spacing:.02em;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -277,15 +283,20 @@ const SITE={wa:"923054531388",email:"info@leatherix.com",ig:"leatherixgear",hero
 /* Products: edit name/desc, add img:"photo-url" (or imgs:["a","b"]) to replace the drawn placeholder.
    Any spec field can be overridden per product; shared defaults are in COMMON. */
 const COMMON={colors:"Black, brown, tan, burgundy and custom colors",design:"Custom patterns, panels, perforation and protection placement",branding:"Logos, labels, patches and hardware",logo:"Embossed, embroidered, debossed, printed or metal plate",labels:"Woven labels, leather patches, hangtags, care labels",hardware:"Zippers, snaps, buckles and rivets in custom finishes",packaging:"Polybag, branded box, dust bag or bulk carton",oem:"Available. OEM and private-label manufacturing"};
+/* ARTICLE NUMBERS: a product with pre:"LJ" gives its photos LJ-001, LJ-002... in list order. To use your own numbers add art:["A-1","A-2",...] to the product. */
 /* Leather Jackets photos: put the file in images/jackets/ and add its path here */
 const JACKETS=["images/jackets/jacket_01.png","images/jackets/jacket_02.png","images/jackets/jacket_03.png","images/jackets/jacket_04.png","images/jackets/jacket_05.png","images/jackets/jacket_06.png","images/jackets/jacket_07.png","images/jackets/jacket_08.png","images/jackets/jacket_09.png","images/jackets/jacket_11.png"];
 /* Riding Gloves photos: put the file in images/gloves/ and add its path here */
 const GLOVES=["images/gloves/glove_01.png","images/gloves/glove_02.png","images/gloves/glove_03.png","images/gloves/glove_04.png","images/gloves/glove_05.png","images/gloves/glove_06.png","images/gloves/glove_07.png","images/gloves/glove_08.png","images/gloves/glove_09.png","images/gloves/glove_10.png","images/gloves/glove_11.png","images/gloves/glove_12.png"];
+/* Vests photos: men -> images/vests-men/, women -> images/vests-women/ */
+const MENVESTS=["images/vests-men/vest_09.png","images/vests-men/vest_10.png","images/vests-men/vest_11.png","images/vests-men/vest_12.png","images/vests-men/vest_13.png","images/vests-men/vest_14.png","images/vests-men/vest_15.png"];
+const WOMENVESTS=["images/vests-women/vest_01.png","images/vests-women/vest_02.png","images/vests-women/vest_03.png","images/vests-women/vest_04.png","images/vests-women/vest_05.png","images/vests-women/vest_06.png","images/vests-women/vest_07.png","images/vests-women/vest_08.png"];
 const PRODUCTS=[
-{n:"Leather Jackets",d:"Premium leather motorcycle and lifestyle jackets.",i:"jacket",imgs:JACKETS,m:"Full-grain or top-grain leather, quilted or mesh lining",l:"Cowhide, goatskin, sheepskin",s:"XS to 4XL, custom size charts"},
-{n:"Leather Vests",d:"Leather and motorcycle-style vests for riding and lifestyle wear.",i:"vest",m:"Full-grain or top-grain leather, quilted or mesh lining",l:"Cowhide, goatskin",s:"XS to 4XL, custom size charts"},
+{n:"Leather Jackets",d:"Premium leather motorcycle and lifestyle jackets.",i:"jacket",pre:"LJ",imgs:JACKETS,m:"Full-grain or top-grain leather, quilted or mesh lining",l:"Cowhide, goatskin, sheepskin",s:"XS to 4XL, custom size charts"},
+{n:"Men's Leather Vests",d:"Leather and motorcycle-style vests for men, for riding and lifestyle wear.",i:"vest",pre:"MV",imgs:MENVESTS,m:"Full-grain or top-grain leather, quilted or mesh lining",l:"Cowhide, goatskin",s:"XS to 4XL, custom size charts"},
+{n:"Women's Leather Vests",d:"Leather and motorcycle-style vests for women, for riding and lifestyle wear.",i:"vest",pre:"WV",imgs:WOMENVESTS,m:"Full-grain or top-grain leather, quilted or mesh lining",l:"Cowhide, goatskin",s:"XS to 4XL, custom size charts"},
 {n:"Motorcycle Riding Suits",d:"One-piece and two-piece motorcycle riding suits.",i:"suit",m:"Leather shell with protective lining",l:"Cowhide",s:"One-piece and two-piece, S to 4XL"},
-{n:"Riding Gloves",d:"Leather motorcycle gloves designed for protection, comfort and performance.",i:"glove",imgs:GLOVES,m:"Leather with protective padding",l:"Cowhide, goatskin",s:"S to XXL"},
+{n:"Riding Gloves",d:"Leather motorcycle gloves designed for protection, comfort and performance.",i:"glove",pre:"RG",imgs:GLOVES,m:"Leather with protective padding",l:"Cowhide, goatskin",s:"S to XXL"},
 {n:"Textile Motorcycle Gear",d:"Technical textile jackets and riding garments.",i:"textile",m:"Technical textile, mesh and waterproof liner options",l:"Leather trims optional",s:"S to 4XL"},
 {n:"Kevlar-Lined Clothing",d:"Motorcycle clothing with protective Kevlar-lined construction.",i:"kevlar",m:"Kevlar-lined panels with textile or leather shell",l:"Optional leather panels",s:"S to 4XL"},
 {n:"Riding Hoodies",d:"Casual-looking motorcycle hoodies designed for riding.",i:"hoodie",m:"Cotton blend with protective lining options",l:"Leather trims optional",s:"S to 3XL"},
@@ -308,7 +319,9 @@ const ic=k=>`<svg class="ic" viewBox="0 0 100 100" aria-hidden="true"><path clas
 const has=p=>!!(p.imgs||p.img);
 const media=(p,big)=>{const g=p.imgs||(p.img?[p.img]:[]);return g.length?`<img class="product-image" ${big?'id="dmi"':'loading="lazy"'} src="${g[0]}" alt="${p.n}">`:ic(p.i)};
 const tn=s=>/^(data:|https?:)/.test(s)?s:s.replace(/^images\//,'images/thumbs/').replace(/\.\w+$/,'.webp');
-const thumbs=p=>p.imgs&&p.imgs.length>1?`<div class="dth">${p.imgs.map((s,k)=>`<button type="button" data-i="${k}" class="${k?'':'on'}" aria-label="Photo ${k+1}"><img src="${tn(s)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${s}'"></button>`).join('')}</div>`:'';
+const art=(p,i)=>(p.art&&p.art[i])||(p.pre&&p.imgs&&p.imgs[i]?p.pre+'-'+String(i+1).padStart(3,'0'):'');
+const thumbs=p=>p.imgs&&p.imgs.length>1?`<div class="dth">${p.imgs.map((s,k)=>`<button type="button" data-i="${k}" class="${k?'':'on'}" aria-label="Photo ${k+1} ${art(p,k)}"><img src="${tn(s)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${s}'">${art(p,k)?`<span>${art(p,k)}</span>`:''}</button>`).join('')}</div>`:'';
+function setArt(i){const pp=PRODUCTS[+dlg.dataset.k],a=art(pp,i);dlg.dataset.ai=i;if(!a)return;$('#artT').textContent=a;$('#artB').textContent=a;$('#dcu').href=wa(`Hi Leatherix, I'd like to discuss: ${pp.n} (Article No: ${a})`)}
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const wa=m=>`https://wa.me/${SITE.wa}`+(m?`?text=${encodeURIComponent(m)}`:"");
 
@@ -321,10 +334,10 @@ $('#prSel').innerHTML=PRODUCTS.map(p=>`<option>${p.n}</option>`).join('')+'<opti
 const dlg=$('#pd');
 function open(k){const p=PRODUCTS[k],d={...COMMON,...p};dlg.dataset.k=k;
  const rows=[["Material",d.m],["Leather type",d.l],["Colors",d.colors],["Sizes",d.s],["Custom design",d.design],["Custom branding",d.branding],["Logo options",d.logo],["Labels",d.labels],["Hardware",d.hardware],["Packaging",d.packaging],["OEM / Private label",d.oem]];
- dlg.innerHTML=`<div class="dg"><button class="x" data-x aria-label="Close">×</button><div class="dm${has(p)?' im':''}">${has(p)?`<div class="dmw">${media(p,1)}</div>`:media(p,1)}${thumbs(p)}</div><div class="dn"><h3>${p.n}</h3><p>${p.d}</p><dl>${rows.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl><div class="da"><a class="btn b1" href="#quote" data-q="${k}">Request a Quote</a><a class="btn b2" target="_blank" rel="noopener" href="${wa(`Hi Leatherix, I'd like to discuss: ${p.n}`)}">Contact Us</a></div></div></div>`;
- dlg.showModal();document.documentElement.style.overflow='hidden';}
+ dlg.innerHTML=`<div class="dg"><button class="x" data-x aria-label="Close">×</button><div class="dm${has(p)?' im':''}">${has(p)?`<div class="dmw">${media(p,1)}${art(p,0)?`<div class="artb" id="artB">${art(p,0)}</div>`:''}</div>`:media(p,1)}${thumbs(p)}</div><div class="dn"><h3>${p.n}</h3>${art(p,0)?`<div class="artl">Article No: <b id="artT">${art(p,0)}</b></div>`:''}<p>${p.d}</p><dl>${rows.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl><div class="da"><a class="btn b1" href="#quote" data-q="${k}">Request a Quote</a><a class="btn b2" id="dcu" target="_blank" rel="noopener" href="${wa(`Hi Leatherix, I'd like to discuss: ${p.n}`)}">Contact Us</a></div></div></div>`;
+ setArt(0);dlg.showModal();document.documentElement.style.overflow='hidden';}
 $('#pg').addEventListener('click',e=>{const c=e.target.closest('[data-k]');if(c)open(+c.dataset.k)});
-dlg.addEventListener('click',e=>{const t=e.target.closest('[data-i]');if(t){const pp=PRODUCTS[+dlg.dataset.k],i=+t.dataset.i;$('#dmi').src=pp.imgs[i];$$('.dth button',dlg).forEach((b,j)=>b.classList.toggle('on',j===i));return}const q=e.target.closest('[data-q]');if(q)$('#prSel').selectedIndex=+q.dataset.q;if(e.target===dlg||e.target.closest('[data-x],[data-q]'))dlg.close()});
+dlg.addEventListener('click',e=>{const t=e.target.closest('[data-i]');if(t){const pp=PRODUCTS[+dlg.dataset.k],i=+t.dataset.i;$('#dmi').src=pp.imgs[i];$$('.dth button',dlg).forEach((b,j)=>b.classList.toggle('on',j===i));setArt(i);return}const q=e.target.closest('[data-q]');if(q){$('#prSel').selectedIndex=+q.dataset.q;const a=art(PRODUCTS[+dlg.dataset.k],+(dlg.dataset.ai||0)),r=$('#quote').elements.r;if(a&&!r.value.includes(a))r.value=(r.value?r.value+'; ':'')+'Article No: '+a}if(e.target===dlg||e.target.closest('[data-x],[data-q]'))dlg.close()});
 dlg.addEventListener('close',()=>document.documentElement.style.overflow='');
 
 $('#quote').addEventListener('submit',e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));
